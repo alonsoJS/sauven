@@ -17,9 +17,7 @@ import { ZipService } from './zip/zip.service';
 import { DirTreeService } from './dir-tree/dir-tree.service';
 import { DBFilesService } from "./db-files/db-files.service";
 import * as path from 'path'
-
-const DECOMPRESS_PATH = 'user-uploads/decompressed-files';
-const SAVE_PATH = './user-uploads/original-zips';
+import { DECOMPRESS_PATH, SAVE_PATH } from "./env";
 
 @Controller()
 export class AppController {
@@ -52,15 +50,19 @@ export class AppController {
       filename: file.originalname
     })
 
+    const tree = await this.dirTree.getTree(DECOMPRESS_PATH)
+
     return {
-      tree: await this.dirTree.getTree(DECOMPRESS_PATH),
+      tree: Object.keys(tree).length === 0 ? null : tree
     };
   }
 
   @Get('tree')
   async getTree() {
+    const tree = await this.dirTree.getTree(DECOMPRESS_PATH)
+
     return {
-      tree: await this.dirTree.getTree(DECOMPRESS_PATH),
+      tree: Object.keys(tree).length === 0 ? null : tree
     };
   }
 

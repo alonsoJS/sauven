@@ -25,11 +25,13 @@ export class DirTreeService {
   private async addCreatedAtToRootFolder(tree: DirectoryTree): Promise<DirectoryTree> {
     const newTree = tree
 
+    if (newTree === null) return {} as DirectoryTree
+
     for (const item of newTree.children) {
       const idx = newTree.children.indexOf(item);
       const uploadedFile = await this.dbFile.getByPath(item.path)
 
-      if (uploadedFile) {
+      if (uploadedFile && newTree.children) {
         newTree.children[idx].custom.createdAt = uploadedFile.createdAt
       }
     }

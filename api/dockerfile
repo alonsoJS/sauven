@@ -1,0 +1,15 @@
+FROM node
+
+RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/api
+WORKDIR /usr/src/app/api
+
+COPY package*.json ./
+COPY prisma ./prisma/
+COPY .env ./
+
+RUN npm install
+
+COPY . .
+EXPOSE 8000
+CMD ["npm", "run", "start"]
